@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 
 class Category(models.Model):
     name = models.CharField(max_length=25, verbose_name="Название категории")
@@ -23,7 +21,7 @@ class Product(models.Model):
     name = models.CharField(max_length=25, verbose_name="Наименование продукта")
     description = models.TextField(verbose_name="Описание продукта")
     image = models.ImageField(
-        upload_to="media/images", verbose_name="Фотография продукта"
+        upload_to="images/", verbose_name="Фотография продукта"
     )
     category = models.ForeignKey(
         to=Category, on_delete=models.CASCADE, verbose_name="Категория продукта"

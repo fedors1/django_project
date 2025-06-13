@@ -10,17 +10,18 @@
         <div class="col-3">
             <div class="card mb-4 box-shadow">
                 <div class="card-header">
-                    <h4 class="my-0 font-weight-normal">Удобный сервис рассылок</h4>
+                    <h4 class="my-0 font-weight-normal">{{ product.name }}</h4>
                 </div>
                 <div class="card-body">
-                    <h1 class="card-title pricing-card-title">$ 140</h1>
+                    <h1 class="card-title pricing-card-title">{{ product.price }} р</h1>
                     <ul class="list-unstyled mt-3 mb-4 text-start m-3">
-                        <li>- Неограниченная лицензия</li>
-                        <li>- Поддержка</li>
-                        <li>- Установка на сервер</li>
-                        <li>- Получение обновлений</li>
+                        <img src="{{ product.image.url }}" alt="Изображение отсутствует" class="img-fluid mb-3">
+                        <li>- {{ product.category.name }}</li>
+                        <li>- {{ product.description|truncatechars:100 }}</li>
+                        <li>- {{ product.created_at|date:"d.M.Y" }}</li>
+                        <li>- {{ product.updated_at|date:"d.M.Y" }}</li>
                     </ul>
-                    <button type="button" class="btn btn-lg btn-block btn-outline-primary">Купить</button>
+                    <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:products_list' %}">Назад</a>
                 </div>
             </div>
         </div>
