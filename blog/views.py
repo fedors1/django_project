@@ -1,6 +1,14 @@
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.urls import reverse, reverse_lazy
+from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
+)
+
 from blog.models import Blog
+from forms import BlogForm
 
 
 class BlogList(ListView):
@@ -10,7 +18,6 @@ class BlogList(ListView):
 
     def get_queryset(self):
         return Blog.objects.filter(is_active=True)
-
 
 
 class BlogDetail(DetailView):
@@ -27,7 +34,7 @@ class BlogDetail(DetailView):
 
 class BlogCreate(CreateView):
     model = Blog
-    fields = ("header", "description", "preview")
+    form_class = BlogForm
     template_name = "blogs/blog_create.html"
     context_object_name = "blog"
     success_url = reverse_lazy("blog:blog_list")
@@ -35,7 +42,7 @@ class BlogCreate(CreateView):
 
 class BlogUpdate(UpdateView):
     model = Blog
-    fields = ("header", "description", "preview")
+    form_class = BlogForm
     template_name = "blogs/blog_create.html"
     context_object_name = "blog"
 
