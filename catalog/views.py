@@ -8,8 +8,8 @@ from django.views.generic import (
     UpdateView,
 )
 
+from catalog.forms import ProductForm
 from catalog.models import Product
-from forms import ProductForm
 
 
 class HomeView(TemplateView):
