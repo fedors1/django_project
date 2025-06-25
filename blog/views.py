@@ -7,8 +7,8 @@ from django.views.generic import (
     UpdateView,
 )
 
+from blog.forms import BlogForm
 from blog.models import Blog
-from catalog.forms import BlogForm
 
 
 class BlogList(ListView):
