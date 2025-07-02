@@ -5,5 +5,14 @@
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:home' %}">Главная</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:products_list' %}">Продукты</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'blog:blog_list' %}">Блоги</a>
+        {% if user.is_authenticated %}
+            <form action="{% url 'users:user_logout' %}" method="post" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" class="p-2 btn btn-outline-primary">Выйти</button>
+            </form>
+        {% else %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:user_login' %}">Войти</a>
+            <a class="p-2 btn btn-outline-primary" href="{% url 'users:user_register' %}">Регистрация</a>
+        {% endif %}
     </nav>
 </div>
