@@ -141,24 +141,27 @@ LOGIN_URL = "users:user_login"
 LOGIN_REDIRECT_URL = "catalog:home"
 LOGOUT_REDIRECT_URL = "catalog:home"
 
-os.environ['SSL_CERT_FILE'] = certifi.where()
+os.environ["SSL_CERT_FILE"] = certifi.where()
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.yandex.ru"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'rackitinkon@yandex.ru'
-EMAIL_HOST_PASSWORD = 'uttcgboqesvpdyma'
+EMAIL_HOST_USER = "rackitinkon@yandex.ru"
+EMAIL_HOST_PASSWORD = "uttcgboqesvpdyma"
 
 
 SERVER_EMAIL = EMAIL_HOST_USER
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 import ssl
+
+
 def get_ssl_context():
     context = ssl.create_default_context()
     context.load_verify_locations(cafile=certifi.where())
     return context
+
 
 EMAIL_SSL_CONTEXT = get_ssl_context()

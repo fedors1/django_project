@@ -20,12 +20,12 @@ class CustomUser(AbstractUser):
     country = models.CharField(blank=True, null=True, verbose_name="Страна проживания")
     image = models.ImageField(blank=True, null=True, upload_to="users/images/")
 
-    token = models.CharField(max_length=100, verbose_name="Token", blank=True, null=True)
+    token = models.CharField(
+        max_length=100, verbose_name="Token", blank=True, null=True
+    )
 
     USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = [
-        "username"
-    ]
+    REQUIRED_FIELDS = ["username"]
 
     class Meta:
         verbose_name = "Пользователь"

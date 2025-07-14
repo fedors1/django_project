@@ -9,7 +9,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm.Meta):
         model = CustomUser
-        fields = ("email", )
+        fields = ("email",)
 
     def clean_phone_number(self):
         """ """
@@ -23,4 +23,5 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserRegistrationForm(AuthenticationForm):
     """Форма аутентификации пользователя"""
+
     pass

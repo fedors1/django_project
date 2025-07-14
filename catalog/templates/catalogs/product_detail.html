@@ -16,6 +16,7 @@
                         <li>- {{ product.description|truncatechars:100 }}</li>
                         <li>- {{ product.created_at|date:"d.M.Y" }}</li>
                         <li>- {{ product.updated_at|date:"d.M.Y" }}</li>
+                        <li>- {{ product.owner }}</li>
                     </ul>
                     <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:products_list' %}">Назад</a>
                 </div>

@@ -18,9 +18,12 @@
                         <ul class="list-unstyled mt-3 mb-4 text-start m-3">
                         </ul>
                         <a href="{% url 'catalog:product_detail' product.pk %}" class="btn btn-lg btn-block btn-outline-primary mt-auto">Посмотреть</a>
-                        <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-lg btn-block btn-outline-primary mt-auto">Редактировать</a>
-                        <a href="{% url 'catalog:product_confirm_delete' product.pk %}" class="btn btn-lg btn-block btn-outline-primary mt-auto">Удалить</a>
-
+                        {% if perms.catalog.can_unpublish_product or request.user == product.owner %}
+                            <a href="{% url 'catalog:product_update' product.pk %}" class="btn btn-lg btn-block btn-outline-primary mt-auto">Редактировать</a>
+                        {% endif %}
+                        {% if perms.catalog.can_remove_product or request.user == product.owner %}
+                            <a href="{% url 'catalog:product_confirm_delete' product.pk %}" class="btn btn-lg btn-block btn-outline-primary mt-auto">Удалить</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>

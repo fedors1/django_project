@@ -22,4 +22,14 @@ urlpatterns = [
         views.ProductDeleteView.as_view(),
         name="product_confirm_delete",
     ),
+    path(
+        "delete_my_product/<int:pk>/",
+        views.DeleteProductView.as_view(),
+        name="delete_my_product",
+    ),
+    path(
+        "change_product_status/<int:pk>",
+        views.ChangeProductStatusPublication.as_view(),
+        name="change_product_status",
+    ),
 ]
