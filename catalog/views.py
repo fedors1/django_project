@@ -16,39 +16,6 @@ from catalog.forms import ProductForm
 from catalog.models import Product
 
 
-class DeleteProductView(LoginRequiredMixin, View):
-    def post(self, request, product_id):
-        product = get_object_or_404(Product, pk=product_id)
-        if not request.user.has_perm("catalog.can_remove_product"):
-            return HttpResponseForbidden(
-                "У вас недостаточно прав для удаления продукта!"
-            )
-        elif request.user != product.owner:
-            return Http404(
-                "Вы не можете удалить продукт, потому что не являетесь его владельцем!"
-            )
-
-        product.delete()
-        return redirect("catalog:product_list")
-
-
-class ChangeProductStatusPublication(LoginRequiredMixin, View):
-    def post(self, request, product_id):
-        product = get_object_or_404(Product, pk=product_id)
-        if not request.user.has_perm("catalog.can_unpublish_product"):
-            return HttpResponseForbidden(
-                "У вас недостаточно прав для изменения статуса публикации продукта!"
-            )
-        elif request.user != product.owner:
-            return Http404(
-                "Вы не можете изменить статус публикации продукта, потому что не являетесь его владельцем!"
-            )
-
-        product.check_status = not product.check_status
-        product.save()
-        return redirect("catalog:product_update")
-
-
 class HomeView(TemplateView):
     template_name = "catalogs/home.html"
 
@@ -90,8 +57,30 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse("catalog:product_detail", args=[self.kwargs.get("pk")])
 
+    def post(self, request, *args, **kwargs):
+        product = self.get_object()
+        if not request.user.has_perm("catalog.can_unpublish_product") \
+                or request.user != product.owner:
+            return HttpResponseForbidden(
+                "У вас недостаточно прав для изменения статуса публикации продукта!"
+            )
+
+        product.check_status = not product.check_status
+        product.save()
+        return redirect("catalog:product_detail")
+
 
 class ProductDeleteView(LoginRequiredMixin, DeleteView):
     model = Product
     template_name = "catalogs/product_confirm_delete.html"
     success_url = reverse_lazy("catalog:products_list")
+
+    def post(self, request, *args, **kwargs):
+        product = self.get_object()
+        if not request.user.has_perm("catalog.can_remove_product") \
+                or request.user != product.owner:
+            return HttpResponseForbidden(
+                "У вас недостаточно прав для удаления продукта!"
+            )
+
+        return super().post(*args, **kwargs)
