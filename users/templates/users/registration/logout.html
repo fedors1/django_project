@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+{% extends 'blogs/base.html' %}
+
+{% block content %}
+    <h2>Вы вышли из системы</h2>
+    <a href="{% url 'users:user_login' %}">Войти снова</a>
+{% endblock %}

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+{% extends 'catalogs/base.html' %}
+{% block content %}
+    <div class="row text-center">
+        <div class="col-3">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Действительно хотите удалить {{ product.name }}?</h4>
+                </div>
+                    <p class="my-0 font-weight-normal">{{ product.name }}</p>
+                    <div class="card-body">
+                        <form class="row" method="post">
+                            {% csrf_token %}
+                            <button class="btn btn-lg btn-block btn-outline-primary" type="submit">Удалить</button>
+                            <a class="btn btn-lg btn-block btn-outline-primary" href="{% url 'catalog:products_list' %}">Отменить</a>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}
