@@ -165,3 +165,9 @@ def get_ssl_context():
 
 
 EMAIL_SSL_CONTEXT = get_ssl_context()
+
+CACHES = {"default": {
+    "BACKEND": "django.core.cache.backends.redis.RedisCache",
+    "LOCATION": "redis://127.0.0.1:6379/1",
+    }
+}

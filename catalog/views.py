@@ -1,7 +1,10 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import Http404, HttpResponseForbidden
-from django.shortcuts import get_object_or_404, redirect
+from django.core.cache import cache
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django.views.generic import (
     CreateView,
     DeleteView,
@@ -9,11 +12,11 @@ from django.views.generic import (
     ListView,
     TemplateView,
     UpdateView,
-    View,
 )
 
 from catalog.forms import ProductForm
 from catalog.models import Product
+from catalog.services import ProductService
 
 
 class HomeView(TemplateView):
@@ -29,7 +32,21 @@ class ProductsListView(ListView):
     template_name = "catalogs/products_list.html"
     context_object_name = "products"
 
+    def get_queryset(self):
+        queryset = cache.get("products")
 
+        if not queryset:
+            queryset = super().get_queryset()
+            cache.set("products", queryset, 60 * 15)
+        return queryset
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["products"] = ProductService.return_list_products()
+        return context
+
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
 class ProductDetailView(LoginRequiredMixin, DetailView):
     model = Product
     template_name = "catalogs/product_detail.html"
