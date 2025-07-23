@@ -30,7 +30,11 @@ class Product(models.Model):
         upload_to="products/images/", verbose_name="Фотография продукта", blank=True
     )
     category = models.ForeignKey(
-        to=Category, on_delete=models.CASCADE, verbose_name="Категория продукта", blank=True, null=True
+        to=Category,
+        on_delete=models.CASCADE,
+        verbose_name="Категория продукта",
+        blank=True,
+        null=True,
     )
     price = models.IntegerField(verbose_name="Цена продукта")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Дата создания")
@@ -39,7 +43,11 @@ class Product(models.Model):
         default=False, verbose_name="Статус публикации продукта"
     )
     owner = models.ForeignKey(
-        to=CustomUser, on_delete=models.CASCADE, verbose_name="Владелец продукта", blank=True, null=True
+        to=CustomUser,
+        on_delete=models.CASCADE,
+        verbose_name="Владелец продукта",
+        blank=True,
+        null=True,
     )
 
     def __str__(self):

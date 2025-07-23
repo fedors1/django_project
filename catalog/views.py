@@ -1,7 +1,7 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.cache import cache
 from django.http import HttpResponseForbidden
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
@@ -15,7 +15,7 @@ from django.views.generic import (
 )
 
 from catalog.forms import ProductForm
-from catalog.models import Product
+from catalog.models import Product, Category
 from catalog.services import ProductService
 
 
@@ -33,16 +33,28 @@ class ProductsListView(ListView):
     context_object_name = "products"
 
     def get_queryset(self):
-        queryset = cache.get("products")
+        return Product.objects.all()
 
-        if not queryset:
-            queryset = super().get_queryset()
-            cache.set("products", queryset, 60 * 15)
-        return queryset
+    def get_context_data(self, *, object_list=None, **kwargs):
+
+        context = super().get_context_data(**kwargs)
+        context["categories"] = Category.objects.all()
+        return context
+
+
+@method_decorator(cache_page(60 * 15), name="dispatch")
+class ProductsByCategoryListView(ListView):
+    model = Product
+    template_name = "catalogs/products_by_category.html"
+    context_object_name = "products"
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("category_id")
+        return ProductService.return_list_products(category_id)
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["products"] = ProductService.return_list_products()
+        context["category"] = get_object_or_404(Category, id=self.kwargs.get("category_id"))
         return context
 
 
@@ -62,6 +74,7 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.owner = self.request.user
+        form.instance.category = self.request.category_id
         return super().form_valid(form)
 
 
@@ -76,8 +89,10 @@ class ProductUpdateView(LoginRequiredMixin, UpdateView):
 
     def post(self, request, *args, **kwargs):
         product = self.get_object()
-        if not request.user.has_perm("catalog.can_unpublish_product") \
-                or request.user != product.owner:
+        if (
+            not request.user.has_perm("catalog.can_unpublish_product")
+            or request.user != product.owner
+        ):
             return HttpResponseForbidden(
                 "У вас недостаточно прав для изменения статуса публикации продукта!"
             )
@@ -94,8 +109,10 @@ class ProductDeleteView(LoginRequiredMixin, DeleteView):
 
     def post(self, request, *args, **kwargs):
         product = self.get_object()
-        if not request.user.has_perm("catalog.can_remove_product") \
-                or request.user != product.owner:
+        if (
+            not request.user.has_perm("catalog.can_remove_product")
+            or request.user != product.owner
+        ):
             return HttpResponseForbidden(
                 "У вас недостаточно прав для удаления продукта!"
             )

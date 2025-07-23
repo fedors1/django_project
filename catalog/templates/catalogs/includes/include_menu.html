@@ -4,6 +4,9 @@
     <nav class="ms-5">
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:home' %}">Главная</a>
         <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:products_list' %}">Продукты</a>
+        {% for category in categories %}
+            <a class="p-2 btn btn-outline-primary" href="{% url 'catalog:products_category' category.id %}">{{ category.name }}</a>
+        {% endfor %}
         <a class="p-2 btn btn-outline-primary" href="{% url 'blog:blog_list' %}">Блоги</a>
         {% if user.is_authenticated %}
             <form action="{% url 'users:user_logout' %}" method="post" style="display:inline;">
