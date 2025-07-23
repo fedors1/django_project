@@ -1,0 +1,14 @@
+{% extends 'catalogs/base.html' %}
+
+{% block content %}
+  <h2>Продукты категории</h2>
+  <ul>
+    {% for product in products %}
+        {% if product.category.id == category.id %}
+            <li>{{ product.name }} - {{ product.price }} р.</li>
+        {% endif %}
+    {% empty %}
+        <li>Нет продуктов в этой категории.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

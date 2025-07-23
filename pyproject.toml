@@ -8,8 +8,23 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.13"
 django = "^5.2.2"
+psycopg2-binary = "^2.9.10"
+python-dotenv = "^1.1.0"
+pillow = "^11.2.1"
+ipython = "^9.3.0"
+certifi = "^2025.6.15"
+pyopenssl = "^25.1.0"
+redis = "^6.2.0"
 
+
+[tool.poetry.group.lint.dependencies]
+black = "^25.1.0"
+flake8 = "^7.2.0"
+isort = "^6.0.1"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.isort]
+profile = "black"
